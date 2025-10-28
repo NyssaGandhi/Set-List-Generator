@@ -50,11 +50,11 @@ def calculate_setlist_score(setlist: List[Dict]) -> float:
     score = 0.0
     
     for i in range(len(setlist)):
-        for j in range(i + 1, min(i + 4, len(setlist))):  # Look at next 3 songs
+        for j in range(i + 1, min(i + 5, len(setlist))):  # Look at next 4 songs
             overlap = calculate_overlap(setlist[i], setlist[j])
             distance = j - i
             # Penalize overlap more heavily for songs that are closer together
-            penalty = overlap * (4 - distance) * 10
+            penalty = overlap * (5 - distance) * 10
             score -= penalty
     
     return score
@@ -72,7 +72,7 @@ def find_best_position_for_song(partial_setlist: List[Dict], song: Dict,
         # Try inserting at this position
         test_list = partial_setlist[:pos] + [song] + partial_setlist[pos:]
         # Only score the relevant section
-        section_to_score = test_list[max(0, pos-3):min(len(test_list), pos+4)]
+        section_to_score = test_list[max(0, pos-4):min(len(test_list), pos+5)]
         score = calculate_setlist_score(section_to_score)
         
         if score > best_score:
@@ -181,7 +181,7 @@ def print_setlist(groups: List[List[Dict]]):
             print(f"     Performers: {performers}")
         
         if idx < len(groups):
-            print(f"\n{'⭐ INTERMISSION ⭐':^70}")
+            print(f"\n{'!! INTERMISSION !!':^70}")
     
     print("\n" + "="*70)
     
